@@ -2,6 +2,7 @@ package com.ecomindo.onboarding.testinghat.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.stream.Collectors.toList;
 
 import com.ecomindo.onboarding.testinghat.dao.HatsDao;
 import com.ecomindo.onboarding.testinghat.dto.HatDTO;
@@ -18,7 +19,7 @@ public class HatsServiceImpl implements HatsService {
 	HatsDao hatsDao;
 
     @Override
-    public List<HatsModel> getAllBooks() {
+    public List<HatsModel> getAllHats() {
         List<HatsModel> res = new ArrayList<>();
         hatsDao.findAll().forEach(res::add);
         
@@ -34,7 +35,10 @@ public class HatsServiceImpl implements HatsService {
 
     @Override
     public List<HatsModel> getHatsBySearchWords(String searchWords) {
-        List<HatsModel> res = hatsDao.findBySearchWords("%"+searchWords+"%");
+        //List<HatsModel> res = hatsDao.findBySearchWords("%"+searchWords+"%");
+
+        List<HatsModel> res = hatsDao.findAll().stream()
+            .filter(x -> x.getProductCode().toLowerCase().contains(searchWords.toLowerCase()) || x.getProductName().toLowerCase().contains(searchWords.toLowerCase())).collect(toList());
 
         return res;
     }
@@ -65,6 +69,17 @@ public class HatsServiceImpl implements HatsService {
     @Override
     public void deleteHat(int id) {
         hatsDao.deleteById(id);
+        
+    }
+
+    @Override
+    public void updateHat2(HatsModel model, HatDTO dto) {
+        model.setProductCode(dto.getProductCode());
+        model.setProductName(dto.getProductName());
+
+        hatsDao.save(model);
+
+        // TODO Auto-generated method stub
         
     }
 

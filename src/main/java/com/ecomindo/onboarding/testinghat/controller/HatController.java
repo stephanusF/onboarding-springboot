@@ -35,9 +35,9 @@ public class HatController {
 	}
 
     @RequestMapping(value = "/getAll", method=RequestMethod.GET)
-	public ResponseEntity<?> getAllBooks() {
+	public ResponseEntity<?> getAllHats() {
 		try {
-			List<HatsModel> res = hatsService.getAllBooks();
+			List<HatsModel> res = hatsService.getAllHats();
 
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
@@ -46,7 +46,7 @@ public class HatController {
 	}
 
     @RequestMapping(value = "/get/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> getBookById(@PathVariable int id) {
+	public ResponseEntity<?> getHatById(@PathVariable int id) {
 		try {
 			HatsModel res = hatsService.getHatById(id);
             
@@ -57,7 +57,7 @@ public class HatController {
 	}
 
     @RequestMapping(value = "/get", method=RequestMethod.GET)
-	public ResponseEntity<?> getBooksBySearchwords(@RequestParam String searchWords) {
+	public ResponseEntity<?> getHatsBySearchwords(@RequestParam String searchWords) {
 		try {
 			List<HatsModel> res = hatsService.getHatsBySearchWords(searchWords);
             
@@ -123,7 +123,8 @@ public class HatController {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
 
-			hatsService.updateHat(id, dto);
+			//hatsService.updateHat(id, dto);
+            hatsService.updateHat2(hat, dto);
             res.setMessage("Successfuly updating hat with id "+id);
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
