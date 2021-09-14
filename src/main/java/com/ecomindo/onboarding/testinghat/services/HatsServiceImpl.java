@@ -78,9 +78,6 @@ public class HatsServiceImpl implements HatsService {
         model.setProductName(dto.getProductName());
 
         hatsDao.save(model);
-
-        // TODO Auto-generated method stub
-        
     }
 
     
