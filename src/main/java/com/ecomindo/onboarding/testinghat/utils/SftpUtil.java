@@ -1,21 +1,21 @@
 package com.ecomindo.onboarding.testinghat.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Base64;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
-
-import org.apache.commons.io.IOUtils;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
@@ -156,21 +156,21 @@ public class SftpUtil {
 
     public String sftpGetFile(String remoteFileName) throws Exception {
 		ChannelSftp channelSftp = null;
-        String base64 = "";
+        String result = "";
 		try {
 			channelSftp = getSftpClient();
 
 			// Get File From Folder Server
             InputStream a = channelSftp.get(remoteFileName);
-            byte[] bytes = IOUtils.toByteArray(a);
-            base64 = Base64.getEncoder().encodeToString(bytes);
+            result = new BufferedReader(new InputStreamReader(a)).lines().collect(Collectors.joining("\n"));
+
 		} catch (Exception e) {
 			throw e;
 		} finally {
 			closeSession(channelSftp);
 			// channelSftp.disconnect();
 		}
-        return base64;
+        return result;
 	}
 
 	public Map<String, String> sftpGetToDirFile(String remoteFileName, String outputFile, Map<String, String> lsStatus,

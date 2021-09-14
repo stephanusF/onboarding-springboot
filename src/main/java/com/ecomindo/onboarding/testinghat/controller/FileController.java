@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ecomindo.onboarding.testinghat.dto.FileResponseDTO;
 import com.ecomindo.onboarding.testinghat.dto.ResultMsgDTO;
 import com.ecomindo.onboarding.testinghat.services.FileService;
+import com.ecomindo.onboarding.testinghat.services.HatsService;
 
 @RestController
 @RequestMapping("/file")
@@ -21,6 +21,9 @@ public class FileController {
 
 	@Autowired
 	FileService fileService;
+
+    @Autowired
+	HatsService hatsService;
 
 //	@ApiParam(allowMultiple=true) 
 	@RequestMapping(path = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -36,15 +39,14 @@ public class FileController {
 		}
 	}
 
-    @RequestMapping(path = "/getFile", method = RequestMethod.GET)
-	public ResponseEntity<?> getFile(@RequestParam String fileName) {
-		FileResponseDTO res = new FileResponseDTO();
-        //ResultMsgDTO res = new ResultMsgDTO();
+    @RequestMapping(path = "/readFile", method = RequestMethod.GET)
+	public ResponseEntity<?> readFile(@RequestParam String fileName) {
+        ResultMsgDTO res = new ResultMsgDTO();
 		try {
-			String base64Res = fileService.getFile(fileName);
-            //fileService.download(fileName, "\\C:\\Users\\stephanus\\Documents\\Docker\\springboot\\testing.txt");
-            res.setFile(base64Res);
-            // res.setMessage("Successfuly uploading file");
+			String fileRes = fileService.getFileContent(fileName);
+            hatsService.addHatFromFileContent(fileRes);
+
+            res.setMessage("Successfuly adding new hat");
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

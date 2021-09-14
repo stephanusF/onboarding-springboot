@@ -1,6 +1,7 @@
 package com.ecomindo.onboarding.testinghat.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
@@ -80,6 +81,14 @@ public class HatsServiceImpl implements HatsService {
         hatsDao.save(model);
     }
 
-    
-    
+    @Override
+    public void addHatFromFileContent(String content) {
+        String denominator = ",";
+        List<String> lines = Arrays.asList(content.split("\n"));
+        for(String items : lines){
+            String productCode = items.split(denominator)[0];
+            String productName = items.split(denominator)[1];
+            hatsDao.save(new HatsModel(productCode,productName));
+        }
+    }   
 }

@@ -10,6 +10,7 @@ public interface HatsService {
     HatsModel getHatById(int id);
     List<HatsModel> getHatsBySearchWords(String searchWords);
     void addHat(HatDTO dto);
+    void addHatFromFileContent(String content);
     boolean isProductCodeExist(String productCode);
     void updateHat(int id, HatDTO dto);
     void updateHat2(HatsModel model, HatDTO dto);
