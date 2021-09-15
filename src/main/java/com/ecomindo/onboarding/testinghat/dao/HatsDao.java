@@ -16,6 +16,8 @@ public interface HatsDao extends JpaRepository<HatsModel, Long> {
 
     void deleteById(int id);
 
+    void deleteByProductCode(String productCode);
+
     @Query(value="SELECT h FROM HatsModel h "
     + "WHERE LOWER(h.productCode) LIKE LOWER(:searchWords) "
     + "OR LOWER(h.productName) LIKE LOWER(:searchWords) "

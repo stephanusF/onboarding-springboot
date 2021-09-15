@@ -22,9 +22,20 @@ public class Config {
 
 	@Value("${spring.custom.sftpFolder}")
 	private String sftpFolder;
+
+	@Value("${spring.custom.sftpFileName}")
+	private String sftpFilename;
 	
 	public String getSftpHost() {
 		return sftpHost;
+	}
+
+	public String getSftpFilename() {
+		return sftpFilename;
+	}
+
+	public void setSftpFilename(String sftpFilename) {
+		this.sftpFilename = sftpFilename;
 	}
 
 	public void setSftpHost(String sftpHost) {

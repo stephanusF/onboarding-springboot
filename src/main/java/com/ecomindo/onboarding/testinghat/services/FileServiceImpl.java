@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.List;
 
 import com.ecomindo.onboarding.testinghat.config.Config;
 import com.ecomindo.onboarding.testinghat.utils.SftpUtil;
@@ -36,12 +37,12 @@ public class FileServiceImpl implements FileService {
 	}
 
     @Override
-    public String getFileContent(String filename) throws Exception {
-        SftpUtil sftp = new SftpUtil(config.getSftpHost(), config.getSftpPort(), config.getSftpUsername(),
+    public List<String> getFileContent(String filename) throws Exception {
+		SftpUtil sftp = new SftpUtil(config.getSftpHost(), config.getSftpPort(), config.getSftpUsername(),
 					config.getSftpPassword(), config.getSftpFolder());
 
         String sftpPath = config.getSftpFolder().concat("/").concat(filename);
-        String res = sftp.sftpGetFile(sftpPath);
+        List<String> res = sftp.sftpGetFile(sftpPath);
         return res;
     }
 
@@ -54,7 +55,5 @@ public class FileServiceImpl implements FileService {
         String sftpPath = config.getSftpFolder().concat("/").concat(filename);
         sftp.sftpGetToFile(sftpPath, output); 
 
-        // TODO Auto-generated method stub
-        
     }
 }

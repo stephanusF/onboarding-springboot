@@ -8,6 +8,8 @@ import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
@@ -154,16 +156,16 @@ public class SftpUtil {
 		}
 	}
 
-    public String sftpGetFile(String remoteFileName) throws Exception {
+    public List<String> sftpGetFile(String remoteFileName) throws Exception {
 		ChannelSftp channelSftp = null;
-        String result = "";
+        List<String> result = new ArrayList<>();
 		try {
 			channelSftp = getSftpClient();
 
 			// Get File From Folder Server
-            InputStream a = channelSftp.get(remoteFileName);
-            result = new BufferedReader(new InputStreamReader(a)).lines().collect(Collectors.joining("\n"));
-
+            InputStream stream = channelSftp.get(remoteFileName);
+			BufferedReader read = new BufferedReader(new InputStreamReader(stream,"UTF-8"));
+			result = read.lines().collect(Collectors.toList());
 		} catch (Exception e) {
 			throw e;
 		} finally {

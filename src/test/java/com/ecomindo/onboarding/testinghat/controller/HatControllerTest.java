@@ -30,16 +30,16 @@ public class HatControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @BeforeEach
-    public void init() {
-    	// given
-        url = String.format("http://localhost:%d/hat/add", port);
-        HatDTO request = new HatDTO();
-        request.setProductCode("hat-00000x");
-        request.setProductName("Hat test X");
+    // @BeforeEach
+    // public void init() {
+    // 	// given
+    //     url = String.format("http://localhost:%d/hat/add", port);
+    //     HatDTO request = new HatDTO();
+    //     request.setProductCode("hat-00000x");
+    //     request.setProductName("Hat test X");
 
-    	this.restTemplate.postForEntity(url, request, ResultMsgDTO.class);
-    }
+    // 	this.restTemplate.postForEntity(url, request, ResultMsgDTO.class);
+    // }
 
 
     @Test
@@ -68,8 +68,8 @@ public class HatControllerTest {
     public void test_add() {
     	url = String.format("http://localhost:%d/hat/add", port);
         HatDTO request = new HatDTO();
-        request.setProductCode("hat-00000y");
-        request.setProductName("Hat test Y");
+        request.setProductCode("hat-00000z");
+        request.setProductName("Hat test Z");
 
     	ResponseEntity<ResultMsgDTO> res = this.restTemplate.postForEntity(url, request, ResultMsgDTO.class);
         ResultMsgDTO body = res.getBody(); 

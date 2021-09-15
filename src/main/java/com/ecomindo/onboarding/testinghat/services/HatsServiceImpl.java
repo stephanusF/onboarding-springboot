@@ -3,6 +3,10 @@ package com.ecomindo.onboarding.testinghat.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import static java.util.stream.Collectors.toList;
 
 import com.ecomindo.onboarding.testinghat.dao.HatsDao;
@@ -18,6 +22,8 @@ public class HatsServiceImpl implements HatsService {
 
     @Autowired
 	HatsDao hatsDao;
+
+    private ExecutorService executor = Executors.newFixedThreadPool(2);
 
     @Override
     public List<HatsModel> getAllHats() {
@@ -81,14 +87,41 @@ public class HatsServiceImpl implements HatsService {
         hatsDao.save(model);
     }
 
+    @Transactional
     @Override
-    public void addHatFromFileContent(String content) {
+    public void addHatFromFileContent(List<String> content) {
         String denominator = ",";
-        List<String> lines = Arrays.asList(content.split("\n"));
-        for(String items : lines){
-            String productCode = items.split(denominator)[0];
+        for(String items : content){
+            String productCode = items.split(denominator)[0].replaceAll("\uFEFF", "");
             String productName = items.split(denominator)[1];
+
+            List<HatsModel> list = hatsDao.findByProductCode(productCode);
+            System.out.println("size : "+list.size());
+            if(list.size()>0){
+                hatsDao.deleteByProductCode(productCode);
+            }
             hatsDao.save(new HatsModel(productCode,productName));
         }
-    }   
+    }
+
+    @Transactional
+    @Override
+    public Future<Void> addHatFromFileContent2(List<String> content) {
+        return executor.submit(() -> {
+			String denominator = ",";
+            for(String items : content){
+                String productCode = items.split(denominator)[0].replaceAll("\uFEFF", "");
+                String productName = items.split(denominator)[1];
+
+                List<HatsModel> list = hatsDao.findByProductCode(productCode);
+                if(list.size()>0){
+                    hatsDao.deleteByProductCode(productCode);
+                }
+                hatsDao.save(new HatsModel(productCode,productName));
+            }
+			
+            return null;
+		});
+    } 
+
 }
