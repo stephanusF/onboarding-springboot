@@ -22,7 +22,7 @@ public class HatsRedisServiceImpl implements HatsRedisService{
     @Override
     public HatsRedisModel getHat(String id) {
         Optional<HatsRedisModel> res = hatsDao.findById(id);
-        if(res==null){
+        if(!res.isPresent()){
             return null;
         }
         return res.get();
