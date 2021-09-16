@@ -5,6 +5,8 @@ import java.util.List;
 import com.ecomindo.onboarding.testinghat.dto.HatDTO;
 import com.ecomindo.onboarding.testinghat.dto.ResultMsgDTO;
 import com.ecomindo.onboarding.testinghat.model.HatsModel;
+import com.ecomindo.onboarding.testinghat.redis.model.HatsRedisModel;
+import com.ecomindo.onboarding.testinghat.redis.services.HatsRedisService;
 import com.ecomindo.onboarding.testinghat.services.HatsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class HatController {
 
     @Autowired
     HatsService hatsService;
+
+	@Autowired
+    HatsRedisService hatsRedisService;
 	
 	@RequestMapping(value = "/test", method=RequestMethod.GET)
 	public ResponseEntity<?> test() {
@@ -48,7 +53,18 @@ public class HatController {
     @RequestMapping(value = "/get/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> getHatById(@PathVariable int id) {
 		try {
-			HatsModel res = hatsService.getHatById(id);
+			HatsModel res = new HatsModel();
+
+			HatsRedisModel redisExist = hatsRedisService.getHat(String.valueOf(id));
+			if(redisExist != null){
+				res.setId(Integer.parseInt(redisExist.getId()));
+				res.setProductCode(redisExist.getProductCode());
+				res.setProductName(redisExist.getProductName());
+			} else{
+				res = hatsService.getHatById(id);
+
+				hatsRedisService.addHatToRedis(new HatsRedisModel(String.valueOf(res.getId()), res.getProductCode(), res.getProductName()));
+			}
             
 			return new ResponseEntity<>(res, HttpStatus.OK);
 		} catch (Exception e) {

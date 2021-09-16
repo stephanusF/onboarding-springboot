@@ -10,6 +10,7 @@ import com.ecomindo.onboarding.testinghat.dto.ResultMsgDTO;
 import com.ecomindo.onboarding.testinghat.model.HatsModel;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-// @DataJpaTest
 public class HatControllerTest {
     
     @LocalServerPort
@@ -30,16 +30,16 @@ public class HatControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    // @BeforeEach
-    // public void init() {
-    // 	// given
-    //     url = String.format("http://localhost:%d/hat/add", port);
-    //     HatDTO request = new HatDTO();
-    //     request.setProductCode("hat-00000x");
-    //     request.setProductName("Hat test X");
+    @BeforeEach
+    public void init() {
+    	// given
+        url = String.format("http://localhost:%d/hat/add", port);
+        HatDTO request = new HatDTO();
+        request.setProductCode("hat-00000x");
+        request.setProductName("Hat test X");
 
-    // 	this.restTemplate.postForEntity(url, request, ResultMsgDTO.class);
-    // }
+    	this.restTemplate.postForEntity(url, request, ResultMsgDTO.class);
+    }
 
 
     @Test
@@ -65,7 +65,7 @@ public class HatControllerTest {
     }
 
     @Test
-    public void test_add() {
+    public void test_insertHat() {
     	url = String.format("http://localhost:%d/hat/add", port);
         HatDTO request = new HatDTO();
         request.setProductCode("hat-00000z");

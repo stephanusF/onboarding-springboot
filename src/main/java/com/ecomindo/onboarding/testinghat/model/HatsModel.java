@@ -23,7 +23,7 @@ public class HatsModel {
 	private Date createdDate;
 
 	public HatsModel() {
-
+		
 	}
 
 	public HatsModel(String productCode, String productName){

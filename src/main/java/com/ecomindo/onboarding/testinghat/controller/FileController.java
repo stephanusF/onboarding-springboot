@@ -66,8 +66,11 @@ public class FileController {
 
 			List<String> fileRes = fileService.getFileContent(fileName);
 
-			Future<Void> first = hatsService.addHatFromFileContent2(new ArrayList<>(fileRes.subList(0, (fileRes.size()) / 2)));
-            Future<Void> second = hatsService.addHatFromFileContent2(new ArrayList<>(fileRes.subList((fileRes.size()) / 2, fileRes.size())));
+			List<String> firstList = new ArrayList<>(fileRes.subList(0, (fileRes.size())/2));
+			List<String> secondList = new ArrayList<>(fileRes.subList((fileRes.size())/2, fileRes.size()));
+
+			Future<Void> first = hatsService.addHatFromFileContent2(firstList);
+            Future<Void> second = hatsService.addHatFromFileContent2(secondList);
             
             while (!(first.isDone() && second.isDone())) {
                 if(!first.isDone()){

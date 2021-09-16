@@ -4,14 +4,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import javax.persistence.PersistenceContext;
+
 import com.ecomindo.onboarding.testinghat.model.HatsModel;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DataJpaTest
 public class HatsDaoMockJPATest {
 
@@ -21,6 +26,7 @@ public class HatsDaoMockJPATest {
     @Autowired
     private HatsDao hatsDao;
 
+    // @BeforeAll
     @BeforeEach
     public void init() {
     	// given

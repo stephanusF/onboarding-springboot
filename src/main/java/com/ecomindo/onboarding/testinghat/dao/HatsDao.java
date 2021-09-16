@@ -7,6 +7,7 @@ import com.ecomindo.onboarding.testinghat.model.HatsModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface HatsDao extends JpaRepository<HatsModel, Long> {
 
@@ -14,8 +15,10 @@ public interface HatsDao extends JpaRepository<HatsModel, Long> {
 
     List<HatsModel> findByProductCode(String productCode);
 
+    @Transactional
     void deleteById(int id);
 
+    @Transactional
     void deleteByProductCode(String productCode);
 
     @Query(value="SELECT h FROM HatsModel h "
@@ -24,6 +27,7 @@ public interface HatsDao extends JpaRepository<HatsModel, Long> {
     )
 	List<HatsModel> findBySearchWords(String searchWords);
 
+    @Transactional
     @Modifying
     @Query(value="UPDATE HatsModel h "
     + "SET h.productCode = :productCode, h.productName = :productName "

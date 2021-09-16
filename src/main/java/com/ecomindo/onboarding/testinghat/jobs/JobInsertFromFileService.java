@@ -36,22 +36,20 @@ public class JobInsertFromFileService extends QuartzJobBean {
 
             List<String> content = fileService.getFileContent(config.getSftpFilename());
 
-            // Future<Void> first = hatsService.addHatFromFileContent2(new ArrayList<>(content.subList(0, (content.size()) / 2)));
-            // Future<Void> second = hatsService.addHatFromFileContent2(new ArrayList<>(content.subList((content.size()) / 2, content.size())));
+            Future<Void> first = hatsService.addHatFromFileContent2(new ArrayList<>(content.subList(0, (content.size()) / 2)));
+            Future<Void> second = hatsService.addHatFromFileContent2(new ArrayList<>(content.subList((content.size()) / 2, content.size())));
             
-            // while (!(first.isDone() && second.isDone())) {
-            //     if(!first.isDone()){
-            //         logger.info("Add Hats From File Job first batch is running...");
-            //     }
+            while (!(first.isDone() && second.isDone())) {
+                if(!first.isDone()){
+                    logger.info("Add Hats From File Job first batch is running...");
+                }
 
-            //     if(!second.isDone()){
-            //         logger.info("Add Hats From File Job second batch is running...");
-            //     }
+                if(!second.isDone()){
+                    logger.info("Add Hats From File Job second batch is running...");
+                }
 			    
-			//     Thread.sleep(500);
-			// }
-
-            hatsService.addHatFromFileContent(content);
+			    Thread.sleep(500);
+			}
 
             logger.info("Add Hats From File Job stopped");
 		} catch (Exception e) {
