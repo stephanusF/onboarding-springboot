@@ -10,14 +10,18 @@ import com.ecomindo.onboarding.testinghat.model.HatsModel;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DataJpaTest
+@TestMethodOrder(OrderAnnotation.class)
 public class HatsDaoMockJPATest {
 
     @Autowired
@@ -40,9 +44,10 @@ public class HatsDaoMockJPATest {
     }
 
     @Test
+    @Order(4)
     public void test_findById() {        
         // when
-        HatsModel found = hatsDao.findById(2);
+        HatsModel found = hatsDao.findById(8);
 
         // then
         assertThat(found.getProductCode()).isEqualTo("hat-00000y");
@@ -50,6 +55,7 @@ public class HatsDaoMockJPATest {
     }
 
     @Test
+    @Order(3)
     public void test_findByProductCode() {        
         // when
         List<HatsModel> found = hatsDao.findByProductCode("hat-00000x");
@@ -59,19 +65,21 @@ public class HatsDaoMockJPATest {
         assertThat(found.get(0).getProductName()).isEqualTo("Hat test X");
     }
 
-    // @Test
-    // public void test_deleteById() {        
-    //     // when
-    //     hatsDao.deleteById(1);
-    //     List<HatsModel> found = hatsDao.findAll();
+    @Test
+    @Order(1)
+    public void test_deleteById() {        
+        // when
+        hatsDao.deleteById(1);
+        List<HatsModel> found = hatsDao.findAll();
 
-    //     // then
-    //     assertThat(found.size()).isEqualTo(1);
-    //     assertThat(found.get(0).getProductCode()).isEqualTo("hat-00000y");
-    //     assertThat(found.get(0).getProductName()).isEqualTo("Hat test Y");
-    // }
+        // then
+        assertThat(found.size()).isEqualTo(1);
+        assertThat(found.get(0).getProductCode()).isEqualTo("hat-00000y");
+        assertThat(found.get(0).getProductName()).isEqualTo("Hat test Y");
+    }
 
     @Test
+    @Order(2)
     public void test_findBySearchWords() {        
         // when
         List<HatsModel> found = hatsDao.findBySearchWords("%00Y%");

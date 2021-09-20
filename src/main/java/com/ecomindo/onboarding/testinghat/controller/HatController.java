@@ -2,6 +2,8 @@ package com.ecomindo.onboarding.testinghat.controller;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
+
 import com.ecomindo.onboarding.testinghat.dto.HatDTO;
 import com.ecomindo.onboarding.testinghat.dto.ResultMsgDTO;
 import com.ecomindo.onboarding.testinghat.model.HatsModel;
@@ -12,6 +14,7 @@ import com.ecomindo.onboarding.testinghat.services.HatsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -162,6 +165,26 @@ public class HatController {
 			hatsService.deleteHat(id);
             res.setMessage("Successfuly deleting hat with id "+id);
 			return new ResponseEntity<>(res, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@RequestMapping(value = "/check-user", method=RequestMethod.GET)
+	@RolesAllowed(value = {"user"})
+	public ResponseEntity<?> checkAuthUser(Authentication authentication) {
+		try {
+			return new ResponseEntity<>(authentication, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@RequestMapping(value = "/check-admin", method=RequestMethod.GET)
+	@RolesAllowed(value = {"admin"})
+	public ResponseEntity<?> checkAuthAdmin(Authentication authentication) {
+		try {
+			return new ResponseEntity<>(authentication, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
